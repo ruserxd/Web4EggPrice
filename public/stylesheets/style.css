@@ -1,0 +1,68 @@
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+h1, h2 {
+  margin-bottom: 20px;
+}
+
+h1 {
+  border-bottom: 2px solid #000; /* 在h1元素下面添加一条黑色的2px粗的分隔線 */
+  padding-bottom: 10px; /* 確保文本和分隔線之間有適當的間距 */
+}
+
+form{
+  display: flex;
+  flex-direction: column;
+  width: 80%;
+  max-width: 600px;
+  margin-bottom: 20px;
+}
+
+label, input, button {
+  margin-bottom: 15px;
+  width: 100%;
+}
+
+table {
+  width: 80%;
+  max-width: 600px;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+th, td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: center;
+}
+
+th {
+  background-color: #f2f2f2;
+}
+
+input[type="text"], input[type="number"], input[type="date"], input[type="search"], input[type="fetchCrawlerData"]{
+  width: calc(100% - 16px);
+  padding: 8px;
+  box-sizing: border-box;
+}
+
+button {
+  padding: 10px 20px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+#response {
+  color: red;
+}
