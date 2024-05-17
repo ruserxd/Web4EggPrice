@@ -1,25 +1,31 @@
 body {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  min-height: 100vh;
   margin: 0;
   font-family: Arial, sans-serif;
+  background-color: #f9f9f9; /* 添加背景顏色 */
 }
 
 h1, h2 {
   margin-bottom: 20px;
+  color: #333; /* 統一的文本顏色 */
 }
 
 h1 {
-  border-bottom: 2px solid #000; /* 在h1元素下面添加一条黑色的2px粗的分隔線 */
+  border-bottom: 2px solid #000; /* 在 h1 元素下面添加一條黑色的 2px 粗的分隔線 */
   padding-bottom: 10px; /* 確保文本和分隔線之間有適當的間距 */
 }
 
-form{
+form {
   display: flex;
   flex-direction: column;
   width: 80%;
   max-width: 600px;
+  background-color: #fff; /* 表單背景顏色 */
+  padding: 20px; /* 表單內邊距 */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* 表單陰影 */
+  border-radius: 8px; /* 表單圓角 */
   margin-bottom: 20px;
 }
 
@@ -28,35 +34,43 @@ label, input, button {
   width: 100%;
 }
 
+input[type="text"], input[type="number"], input[type="date"], input[type="search"], input[type="fetchCrawlerData"] {
+  width: calc(100% - 16px);
+  padding: 10px; /* 調整內邊距 */
+  box-sizing: border-box;
+  border: 1px solid #ccc; /* 添加邊框 */
+  border-radius: 4px; /* 輸入框圓角 */
+}
+
 table {
   width: 80%;
   max-width: 600px;
   border-collapse: collapse;
   margin-bottom: 20px;
+  background-color: #fff; /* 表格背景顏色 */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* 表格陰影 */
+  border-radius: 8px; /* 表格圓角 */
+  overflow: hidden; /* 圓角修正 */
 }
 
 th, td {
   border: 1px solid #ddd;
-  padding: 8px;
+  padding: 12px; /* 調整單元格內邊距 */
   text-align: center;
 }
 
 th {
   background-color: #f2f2f2;
-}
-
-input[type="text"], input[type="number"], input[type="date"], input[type="search"], input[type="fetchCrawlerData"]{
-  width: calc(100% - 16px);
-  padding: 8px;
-  box-sizing: border-box;
+  font-weight: bold; /* 加粗表頭 */
 }
 
 button {
-  padding: 10px 20px;
+  padding: 12px 20px; /* 調整按鈕內邊距 */
   background-color: #4CAF50;
   color: white;
   border: none;
   cursor: pointer;
+  border-radius: 4px; /* 按鈕圓角 */
 }
 
 button:hover {
@@ -65,4 +79,48 @@ button:hover {
 
 #response {
   color: red;
+  font-weight: bold; /* 加粗響應文本 */
+}
+
+.container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.navigation {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px; /* 添加按鈕之間的間距 */
+}
+
+.navigation a {
+  text-decoration: none;
+  color: #fff;
+  background-color: #4CAF50;
+  padding: 10px 20px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* 按鈕陰影 */
+  font-weight: bold;
+  width: 200px; /* 設置固定寬度 */
+  text-align: center;
+}
+
+.navigation a:hover {
+  background-color: #45a049;
+}
+
+footer {
+  width: 100%;
+  text-align: center;
+  padding: 10px 0;
+  font-size: 0.9em;
+  color: #666;
+  background-color: #fff; /* 背景顏色 */
+  border-top: 1px solid #ddd; /* 上邊框 */
 }

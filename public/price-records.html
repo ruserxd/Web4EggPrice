@@ -6,28 +6,27 @@
     <link rel="stylesheet" href="stylesheets/style.css">
 </head>
 <body>
-<h1>Price Records</h1>
-<form id="PriceForm">
-    <input type="text" id="search" placeholder="Search product name">
-    <button id="searcher" type="button" onclick="loadPriceRecords()">Search</button>
-</form>
-<table id="priceTable" border="1">
-    <thead>
-    <tr>
-        <th>Product Name</th>
-        <th>Date</th>
-        <th>Price</th>
-    </tr>
-    </thead>
-    <tbody>
-    </tbody>
-</table>
-
+<div class="container">
+    <h1>Price Records</h1>
+    <form id="PriceForm">
+        <input type="text" id="search" placeholder="Search product name">
+        <button id="searcher" type="button" onclick="loadPriceRecords()">Search</button>
+    </form>
+    <table id="priceTable" border="1">
+        <thead>
+        <tr>
+            <th>Product Name</th>
+            <th>Date</th>
+            <th>Price</th>
+        </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</div>
+<footer>
+    <p>提醒勿侵犯版權 作者：逢甲大學資訊二乙 吳堃瑋</p>
+</footer>
 <script src="javascripts/script.js"></script>
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        loadPriceRecords();
-    });
-</script>
 </body>
 </html>
