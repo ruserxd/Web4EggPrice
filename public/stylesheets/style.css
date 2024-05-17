@@ -10,6 +10,7 @@ body {
 h1, h2 {
   margin-bottom: 20px;
   color: #333; /* 統一的文本顏色 */
+  text-align: center; /* 標題置中 */
 }
 
 h1 {
@@ -115,6 +116,17 @@ button:hover {
   background-color: #45a049;
 }
 
+.personal-info, .bank-info {
+  width: 80%;
+  max-width: 600px;
+  background-color: #fff; /* 背景顏色 */
+  padding: 20px; /* 內邊距 */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* 陰影 */
+  border-radius: 8px; /* 圓角 */
+  margin-bottom: 20px;
+  text-align: center; /* 標題置中 */
+}
+
 footer {
   width: 100%;
   text-align: center;
@@ -123,4 +135,5 @@ footer {
   color: #666;
   background-color: #fff; /* 背景顏色 */
   border-top: 1px solid #ddd; /* 上邊框 */
+  margin-top: auto; /* 將 footer 推到頁面底部 */
 }

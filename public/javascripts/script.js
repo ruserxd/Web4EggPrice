@@ -1,52 +1,47 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // 綁定 productForm 提交事件
-    document.getElementById('productForm').addEventListener('submit', function (e) {
-        e.preventDefault();
+    // 如果存在 productForm，則綁定其提交事件
+    const productForm = document.getElementById('productForm');
+    if (productForm) {
+        productForm.addEventListener('submit', function (e) {
+            e.preventDefault();
 
-        let productName = document.getElementById('productName').value;
-        let price = document.getElementById('price').value;
-        let date = document.getElementById('date').value;
+            let productName = document.getElementById('productName').value;
+            let price = document.getElementById('price').value;
+            let date = document.getElementById('date').value;
 
-        console.log('Product Name:', productName); // 調試日誌
-        console.log('Price:', price); // 調試日誌
-        console.log('Date:', date); // 調試日誌
+            console.log('Product Name:', productName); // 調試日誌
+            console.log('Price:', price); // 調試日誌
+            console.log('Date:', date); // 調試日誌
 
-        fetch('/api/insert', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({productName, price, date})
-        })
-            .then(response => response.text())
-            .then(data => {
-                document.getElementById('response').innerText = data;
-
-                // 只有當 search 元素存在時才加載價格記錄
-                if (document.getElementById('search')) {
-                    loadPriceRecords();  // 插入後重新加載價格記錄
-                }
+            fetch('/api/insert', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({productName, price, date})
             })
-            .catch(error => {
-                console.error('Error:', error);
-                document.getElementById('response').innerText = 'Error: ' + error;
-            });
-        // 綁定 fetchCrawlerData 按鈕點擊事件
-        const fetchCrawlerDataButton = document.getElementById('fetchCrawlerData');
-        if (fetchCrawlerDataButton) {
-            fetchCrawlerDataButton.addEventListener('click', function (e) {
-                e.preventDefault();
-                fetchCrawlerData();
-            });
-        }
-    });
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('response').innerText = data;
 
-    // 只有當 search 元素存在時才加載價格記錄
+                    // 只有當 search 元素存在時才加載價格記錄
+                    if (document.getElementById('search')) {
+                        loadPriceRecords();  // 插入後重新加載價格記錄
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    document.getElementById('response').innerText = 'Error: ' + error;
+                });
+        });
+    }
+
+    // 如果存在 search 元素，則加載價格記錄
     if (document.getElementById('search')) {
         loadPriceRecords();
     }
 
-    // 綁定 fetchCrawlerData 按鈕點擊事件
+    // 如果存在 fetchCrawlerData 按鈕，則綁定其點擊事件
     const fetchCrawlerDataButton = document.getElementById('fetchCrawlerData');
     if (fetchCrawlerDataButton) {
         fetchCrawlerDataButton.addEventListener('click', function (e) {
@@ -78,7 +73,7 @@ function loadPriceRecords() {
 // 新增用於獲取爬蟲數據的函數
 function fetchCrawlerData() {
     let keyword = document.getElementById('searchKeyword').value || '泡麵';
-    fetch(`/api/fetch-products?keyword=${encodeURIComponent(keyword)}`)
+    fetch(`/api/fetch-products?searchKeyword=${encodeURIComponent(keyword)}`)
         .then(response => response.json())
         .then(data => {
             let tableBody = document.getElementById('crawlerTable').getElementsByTagName('tbody')[0];

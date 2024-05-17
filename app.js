@@ -111,7 +111,8 @@ app.get('/api/price-records', (req, res) => {
 // 新增路由來觸發爬蟲並返回商品數據
 app.get('/api/fetch-products', async (req, res) => {
     try {
-        const keyword = req.query.keyword || '泡麵'; // 從查詢字符串中獲取關鍵詞，默認為泡麵
+        const keyword = req.query.searchKeyword || '泡麵'; // 從查詢字符串中獲取關鍵詞，默認為泡麵
+        console.log('搜索關鍵詞:', keyword); // 打印關鍵詞
         const products = await crawler.fetchPChomeData(keyword);
         res.json(products);
     } catch (error) {
