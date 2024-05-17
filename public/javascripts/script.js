@@ -77,7 +77,8 @@ function loadPriceRecords() {
 
 // 新增用於獲取爬蟲數據的函數
 function fetchCrawlerData() {
-    fetch('/api/fetch-products')
+    let keyword = document.getElementById('searchKeyword').value || '泡麵';
+    fetch(`/api/fetch-products?keyword=${encodeURIComponent(keyword)}`)
         .then(response => response.json())
         .then(data => {
             let tableBody = document.getElementById('crawlerTable').getElementsByTagName('tbody')[0];

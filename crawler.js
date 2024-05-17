@@ -1,8 +1,7 @@
 const puppeteer = require('puppeteer');
 
-const PCHOME_SEARCH_URL = 'https://24h.pchome.com.tw/search/?q=%E6%B3%A1%E9%BA%B5&scope=all';
-
-async function fetchPChomeData() {
+async function fetchPChomeData(keyword) {
+    const PCHOME_SEARCH_URL = `https://24h.pchome.com.tw/search/?q=${encodeURIComponent(keyword)}&scope=all`;
     const browser = await puppeteer.launch({ headless: false }); // 打開瀏覽器窗口以便調試
     const page = await browser.newPage();
     await page.goto(PCHOME_SEARCH_URL, { waitUntil: 'networkidle2' });
@@ -10,7 +9,7 @@ async function fetchPChomeData() {
     // 等待頁面加載完成，特別是商品列表部分
     await page.waitForSelector('.col3f');
 
-    // 抓取商品名稱、連結、ID和價格
+    // 抓取商品名稱、鏈接、ID和價格
     const products = await page.evaluate(() => {
         const items = [];
         document.querySelectorAll('h5.prod_name').forEach((item) => {
@@ -35,8 +34,8 @@ async function fetchPChomeData() {
 }
 
 async function main() {
-    const products = await fetchPChomeData();
-    console.log(products); // 輸出抓取到的商品ID、名稱、連結和價格
+    const products = await fetchPChomeData('泡麵'); // 默認為泡麵，但這裡可以傳遞任何關鍵詞
+    console.log(products); // 輸出抓取到的商品ID、名稱、鏈接和價格
     return products;
 }
 
