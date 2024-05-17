@@ -19,13 +19,15 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
+// db負責連接資料庫 path.join 將多個路徑連接成一個
 const db = new sqlite3.Database(path.join(__dirname, 'DB/sqlite.db'), (err) => {
     if (err) {
         return console.error(err.message);
     }
-    console.log('Connected to the SQlite database.');
+    console.log('Connected to the SQLlite database.');
 });
 
+// 此 api 負責選擇所有產品 並透過 JSON 格式回傳
 app.get('/api/quotes', (req, res) => {
     db.all('SELECT * FROM Products', (err, rows) => {
         if (err) {
@@ -85,7 +87,9 @@ app.post('/api/insert', (req, res) => {
     });
 });
 
+// 將兩張 table 透過 ProductID 合併並抓取裡面的相關資料
 app.get('/api/price-records', (req, res) => {
+    // 若沒有相關字的要求，則為空字串
     let search = req.query.search || '';
     let sql = `
         SELECT Products.ProductName, PriceRecords.Date, PriceRecords.Price 
@@ -104,9 +108,10 @@ app.get('/api/price-records', (req, res) => {
     });
 });
 
-// 新增路由來觸發爬蟲并返回商品数据
+// 新增路由來觸發爬蟲並返回商品數據
 app.get('/api/fetch-products', async (req, res) => {
     try {
+        // await 依序地執行程式碼
         const products = await crawler.fetchPChomeData();
         res.json(products);
     } catch (error) {
