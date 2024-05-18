@@ -85,8 +85,42 @@ function fetchCrawlerData() {
                 row.insertCell(2).innerHTML = `<a href="${product.productLink}" target="_blank">${product.productLink}</a>`;
                 row.insertCell(3).innerText = product.price;
             });
+
+            // 顯示 Import Data 按鈕
+            document.getElementById('importData').style.display = 'block';
         })
         .catch(error => {
             console.error('Error:', error);
+        });
+}
+
+function importDataToDatabase() {
+    let tableBody = document.getElementById('crawlerTable').getElementsByTagName('tbody')[0];
+    let products = [];
+    for (let i = 0; i < tableBody.rows.length; i++) {
+        let row = tableBody.rows[i];
+        let product = {
+            productId: row.cells[0].innerText,
+            productName: row.cells[1].innerText,
+            productLink: row.cells[2].innerText,
+            price: row.cells[3].innerText
+        };
+        products.push(product);
+    }
+
+    fetch('/api/import-products', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(products)
+    })
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById('importResponse').innerText = data;
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            document.getElementById('importResponse').innerText = 'Error: ' + error;
         });
 }

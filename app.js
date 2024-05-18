@@ -121,4 +121,33 @@ app.get('/api/fetch-products', async (req, res) => {
     }
 });
 
+// 新增路由來處理將爬取到的資料匯入到資料庫的請求
+app.post('/api/import-products', (req, res) => {
+    let products = req.body;
+
+    let sqlInsertProduct = 'INSERT INTO Products (ProductName, CreationDate) VALUES (?, ?)';
+    let sqlInsertPriceRecord = 'INSERT INTO PriceRecords (ProductID, Date, Price) VALUES (?, ?, ?)';
+
+    products.forEach(product => {
+        db.run(sqlInsertProduct, [product.productName, new Date().toISOString().split('T')[0]], function(err) {
+            if (err) {
+                console.error(err.message);
+                res.status(500).send('Error inserting product');
+                return;
+            }
+
+            let newProductId = this.lastID;
+            db.run(sqlInsertPriceRecord, [newProductId, new Date().toISOString().split('T')[0], product.price], (err) => {
+                if (err) {
+                    console.error(err.message);
+                    res.status(500).send('Error inserting price record');
+                    return;
+                }
+            });
+        });
+    });
+
+    res.send('Products imported successfully');
+});
+
 module.exports = app;
