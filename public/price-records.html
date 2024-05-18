@@ -9,6 +9,9 @@
 <div class="container">
     <h1>Price Records</h1>
     <form id="PriceForm">
+        <select id="productSelect" onchange="setProductName()">
+            <option value="">Select a product</option>
+        </select>
         <input type="text" id="search" placeholder="Search product name">
         <button id="searcher" type="button" onclick="loadPriceRecords()">Search</button>
     </form>
@@ -18,6 +21,7 @@
             <th>Product Name</th>
             <th>Date</th>
             <th>Price</th>
+            <th>Action</th>
         </tr>
         </thead>
         <tbody>

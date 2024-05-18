@@ -19,15 +19,15 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
-// db負責連接資料庫 path.join 將多個路徑連接成一個
+// db负责连接数据库，path.join将多个路径连接成一个
 const db = new sqlite3.Database(path.join(__dirname, 'DB/sqlite.db'), (err) => {
     if (err) {
         return console.error(err.message);
     }
-    console.log('Connected to the SQLlite database.');
+    console.log('Connected to the SQLite database.');
 });
 
-// 此 api 負責選擇所有產品 並透過 JSON 格式回傳
+// 此API负责选择所有产品并通过JSON格式返回
 app.get('/api/quotes', (req, res) => {
     db.all('SELECT * FROM Products', (err, rows) => {
         if (err) {
@@ -45,7 +45,7 @@ app.post('/api/insert', (req, res) => {
     let date = req.body.date;
 
     let sqlSelectProduct = 'SELECT ProductID FROM Products WHERE ProductName = ?';
-    let sqlInsertProduct = 'INSERT INTO Products (ProductName, CreationDate) VALUES (?, ?)';
+    let sqlInsertProduct = 'INSERT INTO Products (ProductName, Date) VALUES (?, ?)';
     let sqlInsertPriceRecord = 'INSERT INTO PriceRecords (ProductID, Date, Price) VALUES (?, ?, ?)';
 
     db.get(sqlSelectProduct, [productName], (err, row) => {
@@ -87,9 +87,8 @@ app.post('/api/insert', (req, res) => {
     });
 });
 
-// 將兩張 table 透過 ProductID 合併並抓取裡面的相關資料
+// 将两张表通过ProductID合并并抓取里面的相关资料
 app.get('/api/price-records', (req, res) => {
-    // 若沒有相關字的要求，則為空字串
     let search = req.query.search || '';
     let sql = `
         SELECT Products.ProductName, PriceRecords.Date, PriceRecords.Price 
@@ -108,11 +107,11 @@ app.get('/api/price-records', (req, res) => {
     });
 });
 
-// 新增路由來觸發爬蟲並返回商品數據
+// 新增路由来触发爬虫并返回商品数据
 app.get('/api/fetch-products', async (req, res) => {
     try {
-        const keyword = req.query.searchKeyword || '泡麵'; // 從查詢字符串中獲取關鍵詞，默認為泡麵
-        console.log('搜索關鍵詞:', keyword); // 打印關鍵詞
+        const keyword = req.query.searchKeyword || '泡麵'; // 从查询字符串中获取关键词，默认为泡麵
+        console.log('搜索关键词:', keyword); // 打印关键词
         const products = await crawler.fetchPChomeData(keyword);
         res.json(products);
     } catch (error) {
@@ -121,27 +120,93 @@ app.get('/api/fetch-products', async (req, res) => {
     }
 });
 
-// 新增路由來處理將爬取到的資料匯入到資料庫的請求
-app.post('/api/import-products', (req, res) => {
-    let products = req.body;
+// 新增用于删除的API
+app.delete('/api/delete', (req, res) => {
+    let productName = req.body.productName;
+    let date = req.body.date;
 
-    let sqlInsertProduct = 'INSERT INTO Products (ProductName, CreationDate) VALUES (?, ?)';
-    let sqlInsertPriceRecord = 'INSERT INTO PriceRecords (ProductID, Date, Price) VALUES (?, ?, ?)';
+    console.log(`Request to delete: ${productName} - ${date}`);
 
-    products.forEach(product => {
-        db.run(sqlInsertProduct, [product.productName, new Date().toISOString().split('T')[0]], function(err) {
+    let sqlDeleteRecord = 'DELETE FROM PriceRecords WHERE ProductID = (SELECT ProductID FROM Products WHERE ProductName = ?) AND Date = ?';
+
+    db.run(sqlDeleteRecord, [productName, date], function(err) {
+        if (err) {
+            console.error(err.message);
+            res.status(500).send('Internal Server Error');
+            return;
+        }
+
+        if (this.changes > 0) {
+            res.send('Delete success');
+        } else {
+            console.log(`No matching record found for: ${productName} - ${date}`);
+            res.status(404).send('No matching record found');
+        }
+    });
+});
+
+// 新增路由來清空所有資料
+app.delete('/api/clear-data', (req, res) => {
+    let sqlDeletePriceRecords = 'DELETE FROM PriceRecords';
+    let sqlDeleteProducts = 'DELETE FROM Products';
+
+    db.run(sqlDeletePriceRecords, function(err) {
+        if (err) {
+            console.error(err.message);
+            res.status(500).send('Internal Server Error');
+            return;
+        }
+
+        db.run(sqlDeleteProducts, function(err) {
             if (err) {
                 console.error(err.message);
-                res.status(500).send('Error inserting product');
+                res.status(500).send('Internal Server Error');
                 return;
             }
 
-            let newProductId = this.lastID;
-            db.run(sqlInsertPriceRecord, [newProductId, new Date().toISOString().split('T')[0], product.price], (err) => {
+            res.send('All data cleared successfully');
+        });
+    });
+});
+
+// 新增路由來處理數據導入
+// 新增路由來處理數據導入
+app.post('/api/import-products', (req, res) => {
+    const products = req.body;
+    const sqlSelectProduct = 'SELECT ProductID FROM Products WHERE ProductName = ?';
+    const sqlInsertProduct = 'INSERT INTO Products (ProductName) VALUES (?)';
+    const sqlInsertPriceRecord = 'INSERT INTO PriceRecords (ProductID, Date, Price) VALUES (?, ?, ?)';
+
+    db.serialize(() => {
+        products.forEach(product => {
+            db.get(sqlSelectProduct, [product.productName], (err, row) => {
                 if (err) {
-                    console.error(err.message);
-                    res.status(500).send('Error inserting price record');
+                    console.error('Error selecting product:', err.message);
                     return;
+                }
+
+                let productId;
+                if (row) {
+                    productId = row.ProductID;
+                    db.run(sqlInsertPriceRecord, [productId, new Date().toISOString().split('T')[0], product.price], (err) => {
+                        if (err) {
+                            console.error('Error inserting price record:', err.message);
+                        }
+                    });
+                } else {
+                    db.run(sqlInsertProduct, [product.productName], function(err) {
+                        if (err) {
+                            console.error('Error inserting product:', err.message);
+                            return;
+                        }
+
+                        productId = this.lastID;
+                        db.run(sqlInsertPriceRecord, [productId, new Date().toISOString().split('T')[0], product.price], (err) => {
+                            if (err) {
+                                console.error('Error inserting price record:', err.message);
+                            }
+                        });
+                    });
                 }
             });
         });
@@ -149,5 +214,4 @@ app.post('/api/import-products', (req, res) => {
 
     res.send('Products imported successfully');
 });
-
 module.exports = app;

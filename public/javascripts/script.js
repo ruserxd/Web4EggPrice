@@ -49,6 +49,9 @@ document.addEventListener('DOMContentLoaded', function() {
             fetchCrawlerData();
         });
     }
+
+    // 加載所有產品名稱到下拉菜單
+    loadProductNames();
 });
 
 function loadPriceRecords() {
@@ -63,12 +66,46 @@ function loadPriceRecords() {
                 row.insertCell(0).innerText = record.ProductName;
                 row.insertCell(1).innerText = record.Date;
                 row.insertCell(2).innerText = record.Price;
+                let deleteCell = row.insertCell(3);
+                let deleteButton = document.createElement('button');
+                deleteButton.innerText = 'Delete';
+                deleteButton.addEventListener('click', function () {
+                    console.log(`Attempting to delete: ${record.ProductName} - ${record.Date} - ${record.Price}`);
+                    deleteRecord(record.ProductName, record.Date);
+                });
+                deleteCell.appendChild(deleteButton);
             });
         })
         .catch(error => {
             console.error('Error:', error);
         });
 }
+
+// 加載所有產品名稱到下拉菜單
+function loadProductNames() {
+    fetch('/api/quotes')
+        .then(response => response.json())
+        .then(data => {
+            let productSelect = document.getElementById('productSelect');
+            data.forEach(product => {
+                let option = document.createElement('option');
+                option.value = product.ProductName;
+                option.innerText = product.ProductName;
+                productSelect.appendChild(option);
+            });
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+}
+
+// 將選中的產品名稱設置到搜索框
+function setProductName() {
+    let productSelect = document.getElementById('productSelect');
+    let selectedProductName = productSelect.value;
+    document.getElementById('search').value = selectedProductName;
+}
+
 
 // 新增用於獲取爬蟲數據的函數
 function fetchCrawlerData() {
@@ -124,3 +161,31 @@ function importDataToDatabase() {
             document.getElementById('importResponse').innerText = 'Error: ' + error;
         });
 }
+
+function deleteRecord(productName, date) {
+    console.log(`Deleting record: ${productName} - ${date}`);
+    fetch('/api/delete', {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ productName, date })
+    })
+        .then(response => response.text())
+        .then(data => {
+            console.log(data);
+            loadPriceRecords();  // 删除后重新加载价格记录
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+}
+
+document.getElementById('clearDataButton').addEventListener('click', function () {
+    if (confirm('Are you sure you want to clear all data?')) {
+        fetch('/api/clear-data', { method: 'DELETE' })
+            .then(response => response.text())
+            .then(data => alert(data))
+            .catch(error => console.error('Error:', error));
+    }
+});
