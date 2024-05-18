@@ -30,6 +30,10 @@ form {
   margin-bottom: 20px;
 }
 
+#fetchresult {
+  display: none; /* 初始隱藏 */
+}
+
 label, input, button {
   margin-bottom: 15px;
   width: 100%;
@@ -75,6 +79,19 @@ button {
 }
 
 button:hover {
+  background-color: #45a049;
+}
+
+.import-button {
+  padding: 12px 20px; /* 調整按鈕內邊距 */
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px; /* 按鈕圓角 */
+}
+
+.import-button:hover {
   background-color: #45a049;
 }
 

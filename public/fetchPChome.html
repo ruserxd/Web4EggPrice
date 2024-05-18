@@ -7,26 +7,27 @@
 </head>
 <body>
 <div class="container">
-<h1>Fetch PChome Data</h1>
-<form id="fetchCrawForm">
-    <input type="text" id="searchKeyword" placeholder="Enter keyword" value="泡麵">
-    <button id="fetchCrawlerData" type="button">Fetch Crawler Data</button>
-</form>
-<table id="crawlerTable" border="1">
-    <thead>
-    <tr>
-        <th>Product ID</th>
-        <th>Product Name</th>
-        <th>Link</th>
-        <th>Price</th>
-    </tr>
-    </thead>
-    <tbody>
-    </tbody>
-</table>
-
-<button id="importData" type="button" style="display:none;">Import Data to Database</button>
-<p id="importResponse"></p>
+    <h1>Fetch PChome Data</h1>
+    <form id="fetchCrawForm">
+        <input type="text" id="searchKeyword" placeholder="Enter keyword" value="泡麵">
+        <button id="fetchCrawlerData" type="button">Fetch Crawler Data</button>
+    </form>
+    <table id="crawlerTable" border="1">
+        <thead>
+        <tr>
+            <th>Product ID</th>
+            <th>Product Name</th>
+            <th>Link</th>
+            <th>Price</th>
+        </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+    <form id="fetchresult" style="display:none;">
+        <button id="importData" type="button" class="import-button">Import Data to Database</button>
+        <p id="importResponse"></p>
+    </form>
 </div>
 <footer>
     <p>作者：逢甲大學資訊二乙＿吳堃瑋＿D1149580</p>

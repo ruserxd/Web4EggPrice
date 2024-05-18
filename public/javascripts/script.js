@@ -50,6 +50,19 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    // 如果存在 clearDataButton 按鈕，則綁定其點擊事件
+    const clearDataButton = document.getElementById('clearDataButton');
+    if (clearDataButton) {
+        clearDataButton.addEventListener('click', function () {
+            if (confirm('Are you sure you want to clear all data?')) {
+                fetch('/api/clear-data', { method: 'DELETE' })
+                    .then(response => response.text())
+                    .then(data => alert(data))
+                    .catch(error => console.error('Error:', error));
+            }
+        });
+    }
+
     // 加載所有產品名稱到下拉菜單
     loadProductNames();
 });
@@ -124,12 +137,13 @@ function fetchCrawlerData() {
             });
 
             // 顯示 Import Data 按鈕
-            document.getElementById('importData').style.display = 'block';
+            document.getElementById('fetchresult').style.display = 'block';
         })
         .catch(error => {
             console.error('Error:', error);
         });
 }
+
 
 function importDataToDatabase() {
     let tableBody = document.getElementById('crawlerTable').getElementsByTagName('tbody')[0];
@@ -180,12 +194,3 @@ function deleteRecord(productName, date) {
             console.error('Error:', error);
         });
 }
-
-document.getElementById('clearDataButton').addEventListener('click', function () {
-    if (confirm('Are you sure you want to clear all data?')) {
-        fetch('/api/clear-data', { method: 'DELETE' })
-            .then(response => response.text())
-            .then(data => alert(data))
-            .catch(error => console.error('Error:', error));
-    }
-});
