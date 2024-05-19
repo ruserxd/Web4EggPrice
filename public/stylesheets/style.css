@@ -123,6 +123,17 @@ button:hover {
   gap: 15px; /* 添加按鈕之間的間距 */
 }
 
+.navigation #clearDataButton {
+  text-decoration: none;
+  color: #fff;
+  background-color: #9B59B6; /* 紫色背景 */
+  padding: 10px 20px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* 按鈕陰影 */
+  font-weight: bold;
+  text-align: center;
+}
+
 .navigation a {
   text-decoration: none;
   color: #fff;
