@@ -39,24 +39,7 @@ async function main() {
     return products;
 }
 
-async function fetchDivContent() {
-    const browser = await puppeteer.launch({ headless: false }); // 打开浏览器窗口以便调试
-    const page = await browser.newPage();
-    await page.goto('https://twbuyer.info/ec_item/bc8wteyxZ-Nj3vXoAmUBOKZh7JeHrbByybBvDJ9Px_4U1', { waitUntil: 'networkidle2' });
-
-    // 等待页面加载完成，并抓取目标div
-    await page.waitForSelector('div.jsx-3646618955', { timeout: 60000 }); // 等待最多60秒
-    const divContent = await page.evaluate(() => {
-        const div = document.querySelector('div.jsx-3646618955');
-        return div ? div.outerHTML : '';
-    });
-
-    await browser.close();
-    return divContent;
-}
-
 module.exports = {
     main,
-    fetchPChomeData,
-    fetchDivContent
+    fetchPChomeData
 };

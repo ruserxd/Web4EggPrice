@@ -106,7 +106,6 @@ app.get('/api/price-records', (req, res) => {
     });
 });
 
-// 新增路由来触发爬虫并返回商品数据
 app.get('/api/fetch-products', async (req, res) => {
     try {
         const keyword = req.query.searchKeyword || '泡麵';
@@ -119,7 +118,6 @@ app.get('/api/fetch-products', async (req, res) => {
     }
 });
 
-// 新增用于删除的API
 app.delete('/api/delete', (req, res) => {
     let productName = req.body.productName;
     let date = req.body.date;
@@ -144,7 +142,6 @@ app.delete('/api/delete', (req, res) => {
     });
 });
 
-// 新增路由來清空所有資料
 app.delete('/api/clear-data', (req, res) => {
     let sqlDeletePriceRecords = 'DELETE FROM PriceRecords';
     let sqlDeleteProducts = 'DELETE FROM Products';
@@ -168,8 +165,6 @@ app.delete('/api/clear-data', (req, res) => {
     });
 });
 
-// 新增路由來處理數據導入
-// 新增路由來處理數據導入
 app.post('/api/import-products', (req, res) => {
     const products = req.body;
     const sqlSelectProduct = 'SELECT ProductID FROM Products WHERE ProductName = ?';
@@ -214,15 +209,5 @@ app.post('/api/import-products', (req, res) => {
     res.send('Products imported successfully');
 });
 
-app.get('/api/fetch-div-content', async (req, res) => {
-    try {
-        console.log('API /api/fetch-div-content called');
-        const divContent = await crawler.fetchDivContent();
-        console.log('Fetched div content:', divContent);
-        res.json({ divContent });
-    } catch (error) {
-        console.error('Error during fetching div content:', error);
-        res.status(500).send('Fetch div content failed: ' + error.message);
-    }
-});
+
 module.exports = app;
