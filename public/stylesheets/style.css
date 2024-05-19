@@ -14,13 +14,14 @@ h1, h2 {
 }
 
 h1 {
-  border-bottom: 2px solid #000; /* 在 h1 元素下面添加一條黑色的 2px 粗的分隔線 */
+  border-bottom: 2px solid #3498DB; /* 在 h1 元素下面添加一條藍色的 2px 粗的分隔線 */
   padding-bottom: 10px; /* 確保文本和分隔線之間有適當的間距 */
 }
 
 form {
   display: flex;
   flex-direction: column;
+  align-items: center; /* 元素置中 */
   width: 80%;
   max-width: 600px;
   background-color: #fff; /* 表單背景顏色 */
@@ -34,17 +35,21 @@ form {
   display: none; /* 初始隱藏 */
 }
 
-label, input, button {
+label, input, button, select {
   margin-bottom: 15px;
   width: 100%;
 }
 
+select {
+  margin-bottom: 20px;
+}
+
 input[type="text"], input[type="number"], input[type="date"], input[type="search"], input[type="fetchCrawlerData"] {
   width: calc(100% - 16px);
-  padding: 10px; /* 調整內邊距 */
+  padding: 10px;
   box-sizing: border-box;
-  border: 1px solid #ccc; /* 添加邊框 */
-  border-radius: 4px; /* 輸入框圓角 */
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }
 
 table {
@@ -52,39 +57,40 @@ table {
   max-width: 600px;
   border-collapse: collapse;
   margin-bottom: 20px;
-  background-color: #fff; /* 表格背景顏色 */
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* 表格陰影 */
-  border-radius: 8px; /* 表格圓角 */
-  overflow: hidden; /* 圓角修正 */
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
 }
 
 th, td {
   border: 1px solid #ddd;
-  padding: 12px; /* 調整單元格內邊距 */
+  padding: 12px;
   text-align: center;
 }
 
 th {
-  background-color: #f2f2f2;
-  font-weight: bold; /* 加粗表頭 */
+  background-color: #3498DB;
+  color: #fff;
+  font-weight: bold;
 }
 
 button {
-  padding: 12px 20px; /* 調整按鈕內邊距 */
-  background-color: #4CAF50;
+  padding: 12px 20px;
+  background-color: #E74C3C;
   color: white;
   border: none;
   cursor: pointer;
-  border-radius: 4px; /* 按鈕圓角 */
+  border-radius: 4px;
 }
 
 button:hover {
-  background-color: #45a049;
+  background-color: #C0392B; /* 深紅色按鈕背景 */
 }
 
 .import-button {
   padding: 12px 20px; /* 調整按鈕內邊距 */
-  background-color: #4CAF50;
+  background-color: #F1C40F; /* 黃色按鈕背景 */
   color: white;
   border: none;
   cursor: pointer;
@@ -92,11 +98,11 @@ button:hover {
 }
 
 .import-button:hover {
-  background-color: #45a049;
+  background-color: #F39C12; /* 深黃色按鈕背景 */
 }
 
 #response {
-  color: red;
+  color: #E74C3C; /* 紅色響應文本 */
   font-weight: bold; /* 加粗響應文本 */
 }
 
@@ -120,7 +126,7 @@ button:hover {
 .navigation a {
   text-decoration: none;
   color: #fff;
-  background-color: #4CAF50;
+  background-color: #9B59B6; /* 紫色背景 */
   padding: 10px 20px;
   border-radius: 5px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* 按鈕陰影 */
@@ -130,7 +136,7 @@ button:hover {
 }
 
 .navigation a:hover {
-  background-color: #45a049;
+  background-color: #8E44AD; /* 深紫色背景 */
 }
 
 .personal-info, .bank-info {
@@ -153,4 +159,8 @@ footer {
   background-color: #fff; /* 背景顏色 */
   border-top: 1px solid #ddd; /* 上邊框 */
   margin-top: auto; /* 將 footer 推到頁面底部 */
+}
+
+#importResponse {
+  text-align: center;
 }
