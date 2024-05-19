@@ -23,11 +23,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 .then(response => response.text())
                 .then(data => {
                     document.getElementById('response').innerText = data;
-
-                    // 只有當 search 元素存在時才加載價格記錄
-                    if (document.getElementById('search')) {
-                        loadPriceRecords();  // 插入後重新加載價格記錄
-                    }
                 })
                 .catch(error => {
                     console.error('Error:', error);
@@ -62,7 +57,32 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
+    const fetchCanvasButton = document.getElementById('fetchCanvasButton');
+    if (fetchCanvasButton) {
+        fetchCanvasButton.addEventListener('click', function() {
+            fetch('/api/fetch-canvas-image')
+                .then(response => response.json())
+                .then(data => {
+                    const canvasContainer = document.getElementById('canvasContainer');
+                    const img = document.createElement('img');
+                    img.src = data.imageUrl;
+                    img.alt = 'Fetched Canvas Image';
+                    canvasContainer.innerHTML = '';
+                    canvasContainer.appendChild(img);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        });
+    }
 
+    const fetchCanvasDataButton = document.getElementById('fetchCanvasData');
+    if (fetchCanvasDataButton) {
+        fetchCanvasDataButton.addEventListener('click', function (e) {
+            e.preventDefault();
+            fetchCanvasData();
+        });
+    }
     // 加載所有產品名稱到下拉菜單
     loadProductNames();
 });
@@ -115,8 +135,7 @@ function loadProductNames() {
 // 將選中的產品名稱設置到搜索框
 function setProductName() {
     let productSelect = document.getElementById('productSelect');
-    let selectedProductName = productSelect.value;
-    document.getElementById('search').value = selectedProductName;
+    document.getElementById('search').value = productSelect.value;
 }
 
 
@@ -189,6 +208,21 @@ function deleteRecord(productName, date) {
         .then(data => {
             console.log(data);
             loadPriceRecords();  // 删除后重新加载价格记录
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+}
+
+function fetchCanvasData() {
+    fetch('/api/fetch-canvas-image')
+        .then(response => response.json())
+        .then(data => {
+            const img = document.createElement('img');
+            img.src = data.image;
+            const canvasImageContainer = document.getElementById('canvasImageContainer');
+            canvasImageContainer.innerHTML = ''; // 清空容器
+            canvasImageContainer.appendChild(img);
         })
         .catch(error => {
             console.error('Error:', error);
